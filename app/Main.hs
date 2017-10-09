@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings,TemplateHaskell #-}
 module Main where
 
-import Lib
+import TextOperations
 
 import Data.Aeson
 import Data.Aeson.TH
-import qualified Data.ByteString.Lazy.Char8 as BL
-import Data.ByteString(ByteString)
+import qualified Data.ByteString.Char8 as BL
+import Data.ByteString.Char8(ByteString)
 
 import Crypto.Cipher
 
@@ -19,12 +19,12 @@ $(deriveJSON defaultOptions ''TestData)
 testContent :: BL.ByteString
 testContent = "{ \"foo\": 42 }"
 
-initAES256 :: ByteString -> AES256
+initAES256 :: BL.ByteString -> AES256
 initAES256 = either (error . show) cipherInit . makeKey
 
-encrypt :: ByteString -> ByteString -> ByteString
-encrypt key message = ecbEncrypt (initAES256 key) message
+encrypt :: BL.ByteString -> BL.ByteString -> BL.ByteString
+encrypt key message = ecbEncrypt (initAES256 key) (padMessage message)
 
 main :: IO ()
 -- main = print (decode testContent :: Maybe TestData)
-main = print $ encrypt "2manysecretsxxxxxxxxxxxxxxxxxxxx" "Will Sucks xxxxx"
+main = print $ encrypt "2manysecretsxxxxxxxxxxxxxxxxxxxx" "Will Sucks"

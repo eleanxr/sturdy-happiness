@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings,TemplateHaskell #-}
 module Main where
 
+import KeyOperations
 import TextOperations
 
 import Data.Aeson
@@ -23,8 +24,8 @@ initAES256 :: BL.ByteString -> AES256
 initAES256 = either (error . show) cipherInit . makeKey
 
 encrypt :: BL.ByteString -> BL.ByteString -> BL.ByteString
-encrypt key message = ecbEncrypt (initAES256 key) (padMessage message)
+encrypt key message = ecbEncrypt (initAES256 (expandKey key)) (padMessage message)
 
 main :: IO ()
 -- main = print (decode testContent :: Maybe TestData)
-main = print $ encrypt "2manysecretsxxxxxxxxxxxxxxxxxxxx" "Will Sucks"
+main = print $ encrypt "2manysecrets" "Will Sucks"

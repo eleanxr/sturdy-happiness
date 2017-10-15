@@ -29,7 +29,7 @@ encrypt :: BL.ByteString -> BL.ByteString -> BL.ByteString
 encrypt key message = ecbEncrypt (initAES256 key) (padEcb message)
 
 decrypt :: BL.ByteString -> BL.ByteString -> BL.ByteString
-decrypt key message = ecbDecrypt (initAES256 key) message
+decrypt key message = unpadEcb $ ecbDecrypt (initAES256 key) message
 
 key = "2manysecrets"
 message = "This is a test message"

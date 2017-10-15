@@ -26,7 +26,7 @@ initAES256 :: BL.ByteString -> AES256
 initAES256 = either (error . show) cipherInit . makeKey . expandKey
 
 encrypt :: BL.ByteString -> BL.ByteString -> BL.ByteString
-encrypt key message = ecbEncrypt (initAES256 key) (padMessage message)
+encrypt key message = ecbEncrypt (initAES256 key) (padEcb message)
 
 decrypt :: BL.ByteString -> BL.ByteString -> BL.ByteString
 decrypt key message = ecbDecrypt (initAES256 key) message

@@ -32,7 +32,7 @@ decrypt :: BL.ByteString -> BL.ByteString -> BL.ByteString
 decrypt key message = unpadEcb $ ecbDecrypt (initAES256 key) message
 
 key = "2manysecrets"
-message = "This is a test message"
+message = "01234567890123456"
 
 main :: IO ()
 main = do

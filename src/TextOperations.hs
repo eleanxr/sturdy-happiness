@@ -30,9 +30,12 @@ unpadEcbString = unpadEcb . B.pack
 serializeEcb :: ByteString -> Put
 serializeEcb message = do
   putByteString message
-  putByteString $ B.replicate ((16 - modulus) - 4) '\0'
+  putByteString $ B.replicate padLength '\0'
   putInt32be (fromIntegral (B.length message))
-    where modulus = (B.length message `mod` 16)
+    where messageLength = B.length message
+          messageLengthModulus = messageLength `mod` 16
+          padLength | 16 - messageLengthModulus >= 4 = 16 - messageLengthModulus - 4
+                    | otherwise = 32 - messageLengthModulus - 4
 
 deserializeEcb :: Int -> Get ByteString
 deserializeEcb stringLength = do
